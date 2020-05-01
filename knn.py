@@ -2,7 +2,7 @@
 """
 @author: Jack
 """
-#from scipy.spatial import distance
+from scipy.spatial import distance
 import numpy as np
 from collections import Counter
 
@@ -25,15 +25,15 @@ class KNN:
         #itterates through the x_test array
         for i in range(len(test)):
             distances = []
-            for index in range(len(self.x_train)):
+            for j in range(len(self.x_train)):
                 #calculate distance between the test and all the training sets
                 #currently a place holder
-                dist = np.linalg.norm(test[i] - self.x_train[index])
+                dist = distance.euclidean(test[i], self.x_train[j])
                 #appends the distance for use later
-                distances.append((self.x_train[index], dist, self.y_train[index]))
+                distances.append((dist, self.y_train[j]))
             
             #sorts the distances and appends the K closest distances
-            distances.sort(key=lambda x: x[1])
+            distances.sort(key=lambda x: x[0])
             alloftest.append(distances[:self.k])
          
         output = []    
@@ -43,7 +43,7 @@ class KNN:
             class_counter = Counter()
             for boi in alloftest[i]:
                 # Finds out how many times it's closes to each possibility
-                class_counter[boi[2]] += 1
+                class_counter[boi[1]] += 1
                 
             # Appends the one with the most
             output.append(class_counter.most_common(1)[0][0])
